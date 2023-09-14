@@ -37,13 +37,30 @@ const array = [
 
 function reverseArrayWithSpecialCharacters(array) {
   const specialCharacters = [];
+  /*It will iterates over the array and check if the element 
+  is a special character
+  */
   for (let i = 0; i < array.length; i++) {
+    /*with the match method If the element is a special character, the code pushes its
+    index to the specialCharacter Array.
+  */
     if (!String(array[i]).match(/[a-zA-Z0-9]/)) {
+      /*This will stores the indexes of all special character
+       */
       specialCharacters.push(i);
     }
   }
 
+  /*Create another empty array
+   */
+
   const reversedArray = [];
+  /*It will iterates over the array and checks if the current
+  element is in the specialCharacter Array.
+  If it's not then we push that value into our new array.
+    OtherWise, the code pushes the element at the end of the array,
+    in reverse order.  
+  */
   for (let i = 0; i < array.length; i++) {
     if (specialCharacters.indexOf(i) !== -1) {
       reversedArray.push(array[i]);
