@@ -3,7 +3,7 @@ import { footerLogo } from "../assets";
 function Footer() {
   return (
     <footer>
-      <div className="row footer__row">
+      <div className="footer__row">
         <a href="/" className="footer_anchor">
           <figure className="footer__logo">
             <img src={footerLogo} className="footer__logo--img" />

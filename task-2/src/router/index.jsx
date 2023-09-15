@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import NotFound from "../pages/NotFound";
 import Explore from "../pages/Explore";
 import Home from "../pages/Home";
+import Crud from "../pages/Crud";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/explore",
         element: <Explore />,
+      },
+      {
+        path: "/dogsFrm",
+        element: <Crud />,
       },
     ],
   },
