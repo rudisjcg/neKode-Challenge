@@ -10,11 +10,20 @@ function Nav() {
       </picture>
       <nav className="navLinks">
         <ul className="nav_list_links">
-          <li>
-            <Link to={"/"}>Home</Link>
+          <li className="nav__link">
+            <Link className="link" to={"/"}>
+              Home
+            </Link>
           </li>
-          <li>
-            <Link to={"/Explore"}>Explore</Link>
+          <li className="nav__link">
+            <Link className="link" to={"/Explore"}>
+              Explore
+            </Link>
+          </li>
+          <li className="nav__link">
+            <Link className="link" to={"/dogsFrm"}>
+              Dogs
+            </Link>
           </li>
         </ul>
         <button className="btn-menu">

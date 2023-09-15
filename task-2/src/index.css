@@ -18,10 +18,12 @@ li {
 }
 
 .layoutContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0 auto;
   max-width: 1200px;
   background: white;
-  height: fit-content;
   box-shadow: -3px -7px 31px 4px rgba(0, 0, 0, 0.26);
   -webkit-box-shadow: -3px -7px 31px 4px rgba(0, 0, 0, 0.26);
   -moz-box-shadow: -3px -7px 31px 4px rgba(0, 0, 0, 0.26);
@@ -41,6 +43,15 @@ li {
 }
 
 .navLinks {
+}
+
+.nav__link {
+  font-size: 20px;
+  transition: all 300ms ease;
+}
+
+.nav__link:hover {
+  transform: scale(1.09);
 }
 
 .nav_list_links {
@@ -74,14 +85,16 @@ li {
 
 /* Home Page */
 
-section {
-  width: 100%;
-}
-
 .pictureHomeContainer {
   display: flex;
   width: 100%;
   height: 400px;
+}
+
+.link {
+  outline: none;
+  text-decoration: none;
+  color: black;
 }
 
 .imgSource {
@@ -124,6 +137,26 @@ section {
   padding-bottom: 20px;
 }
 
+.searchWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.inputSearch {
+  width: 350px;
+  padding: 10px;
+  height: 25px;
+  border-radius: 20px;
+}
+
+.selectFilter {
+  width: 150px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
 .dogsTitle {
   font-size: 42px;
   font-weight: 900;
@@ -161,12 +194,17 @@ section {
 
 .dog {
   margin-bottom: 10px;
+  border: 1px solid black;
+  padding: 3px;
+  background-color: black;
+  border-radius: 10px;
 }
 
 .dogName {
-  color: black;
+  color: white;
   text-align: center;
-  margin-bottom: 0;
+  margin: 0;
+  font-weight: 400;
 }
 
 .dogWrapper {
@@ -229,12 +267,48 @@ section {
   transition: transform 450ms, opacity 300ms;
 }
 
-/* Footer */
+/* Explore Page */
+
+.explorePage {
+  padding: 0 40px;
+  flex-grow: 1;
+  margin-top: 40px;
+}
 
 .row {
   display: flex;
   flex-direction: column;
   margin: 10px;
+}
+
+.subBreed_td {
+  color: black;
+}
+
+.tableRow {
+  padding: 20px;
+}
+
+table#customTable {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 3px;
+  border-color: #f89b20;
+  border-style: solid;
+  color: #000000;
+}
+
+table#customTable td,
+table#customTable th {
+  border-width: 3px;
+  border-color: #f89b20;
+  border-style: solid;
+  padding: 9px;
+}
+
+table#customTable thead {
+  background-color: #f89b20;
 }
 
 /* Footer */
@@ -294,4 +368,130 @@ footer {
 .footer_anchor:hover .footer__logo--popper {
   transform: translateX(60px);
   opacity: 1;
+}
+
+/* Modal Form CSS */
+
+.dogsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dogForm__label {
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.dogsForm__input {
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 1px;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.dogForm__PictureWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dogForm__Picture {
+  display: flex;
+  width: 100%;
+}
+
+.dogForm__ImgSRC {
+  width: 120px;
+  height: 120px;
+  transition: all 300ms ease;
+}
+
+.dogForm_checkbox {
+  width: 25px;
+  cursor: pointer;
+  transition: all 300ms ease;
+}
+
+.checkActive {
+  transform: scale(0.8);
+  filter: grayscale(65%) brightness(102%) saturate(96%) contrast(111%)
+    drop-shadow(-1px 10px 20px rgba(12, 129, 138, 0.53));
+  -webkit-filter: grayscale(65%) brightness(102%) saturate(96%) contrast(111%)
+    drop-shadow(-1px 10px 20px rgba(12, 129, 138, 0.53));
+  -moz-filter: grayscale(65%) brightness(102%) saturate(96%) contrast(111%)
+    drop-shadow(-1px 10px 20px rgba(12, 129, 138, 0.53));
+}
+
+.dogForm_checkbox:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(-0.5px 5px 1px #000000);
+}
+
+.btn__form {
+  --color: #00a97f;
+  padding: 0.8em 1.7em;
+  background-color: transparent;
+  border-radius: 0.3em;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.5s;
+  font-weight: 400;
+  font-size: 17px;
+  border: 1px solid;
+  font-family: inherit;
+  text-transform: uppercase;
+  color: var(--color);
+  z-index: 1;
+  width: 150px;
+  align-self: center;
+}
+
+.btn__form::before,
+.btn__form::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+  background-color: var(--color);
+  transition: 1s ease;
+}
+
+.btn__form::before {
+  top: -1em;
+  left: -1em;
+}
+
+.btn__form::after {
+  left: calc(100% + 1em);
+  top: calc(100% + 1em);
+}
+
+.btn__form:hover::before,
+.btn__form:hover::after {
+  height: 410px;
+  width: 410px;
+}
+
+.btn__form:hover {
+  color: rgb(10, 25, 30);
+}
+
+.btn__form:active {
+  filter: brightness(0.8);
+}
+
+/* Table Dogs */
+
+.img__formList {
+  width: 50px;
+  height: 50px;
 }
