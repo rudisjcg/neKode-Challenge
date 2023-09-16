@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getInitialDogData } from "../redux/reducers/getDogdata";
 import axios from "axios";
@@ -6,19 +6,10 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import Header from "../components/Header";
+import { pDogs, textDogs } from "../constants";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Crud() {
   const dispatch = useDispatch();
@@ -26,13 +17,28 @@ function Crud() {
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
   const [subBreed, setSubBreed] = useState("");
-  const [selSubBreed, setSelSubBreed] = useState("");
   const [images, setImages] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const storedFormsJSON = localStorage.getItem("storedForms");
+  const storedForms = storedFormsJSON ? JSON.parse(storedFormsJSON) : [];
   const [isEditing, setIsEditing] = useState(false);
+  const handleClose = () => setOpen(false);
+  const btn = true;
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: isSmallScreen ? "250px" : "400px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   const [formData, setFormData] = useState({
     id: String,
     name: "",
@@ -44,25 +50,56 @@ function Crud() {
   const data = useSelector((state) => {
     return state.app;
   });
-
-  async function getList() {
-    const breedNames = Object.keys(data?.dogData?.message);
-    return setDogListData(breedNames);
-  }
+  const handleOpen = () => {
+    setOpen(true);
+    setFormData({
+      id: String,
+      name: "",
+      breed: "",
+      subBreed: "",
+      imageList: [],
+      checkedImages: [],
+    });
+  };
 
   const getSubBreed = async (breed) => {
     const { data } = await axios.get(`https://dog.ceo/api/breed/${breed}/list`);
     setSubBreed(data?.message);
   };
 
-  const handleInputChange = (event) => {
-    setBreed(event.target.value);
+  const handleSubBreedChange = (event) => {
+    const selectedValue = event.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      subBreed: selectedValue,
+    }));
   };
 
-  const handleSubBreedChange = (event) => {
-    setSelSubBreed(event.target.value);
-  };
   const handleImageList = (event) => {
+    const selectedValue = event.target.value;
+
+    if (event.target.checked) {
+      // Si el checkbox está marcado, agrega el valor al array
+      setFormData((prevData) => ({
+        ...prevData,
+        checkedImages: [...prevData.checkedImages, selectedValue],
+        imageList: [...prevData.imageList, selectedValue],
+      }));
+    } else {
+      // Si el checkbox se desmarca, quita el valor del array
+      setFormData((prevData) => ({
+        ...prevData,
+        checkedImages: prevData.checkedImages.filter(
+          (value) => value !== selectedValue
+        ),
+        imageList: prevData.checkedImages.filter(
+          (value) => value !== selectedValue
+        ),
+      }));
+    }
+  };
+
+  const handleImageNew = (event) => {
     const selectedValue = event.target.value;
     if (event.target.checked) {
       // Si el checkbox está marcado, agrega el valor al array
@@ -72,8 +109,12 @@ function Crud() {
       setImageList(imageList.filter((value) => value !== selectedValue));
     }
   };
-  const storedFormsJSON = localStorage.getItem("storedForms");
-  const storedForms = storedFormsJSON ? JSON.parse(storedFormsJSON) : [];
+
+  async function getList() {
+    const breedNames = Object.keys(data?.dogData?.message);
+    return setDogListData(breedNames);
+  }
+
   async function saveDogForm(ev) {
     ev.preventDefault();
     const editedIndex = storedForms.findIndex(
@@ -119,13 +160,13 @@ function Crud() {
     setOpen(!open);
     setIsEditing(true);
   }
-  console.log(formData);
   async function handleDeleteForm(id) {
     const indexToDelete = storedForms.findIndex((form) => form.id === id);
     if (indexToDelete !== -1) {
       storedForms.splice(indexToDelete, 1);
       localStorage.setItem("storedForms", JSON.stringify(storedForms));
     }
+    navigate(0);
   }
 
   async function getImages(breed) {
@@ -134,7 +175,6 @@ function Crud() {
     );
     setImages(data?.message);
   }
-  console.log(images);
 
   useEffect(() => {
     getList();
@@ -143,19 +183,20 @@ function Crud() {
     dispatch(getInitialDogData());
   }, []);
   useEffect(() => {
-    if (breed) {
-      getSubBreed(breed);
-      getImages(breed);
+    if (breed || formData.breed) {
+      getSubBreed(breed || formData.breed);
+      getImages(breed || formData.breed);
     }
-  }, [breed]);
+  }, [breed || formData.breed]);
 
   return (
     <>
+      <Header text={textDogs} btn={btn} />
       <section className="explorePage">
         <div>
-          <h1>Welcome to your Dogs List!</h1>
-          <h2>Start Creating a list of your favorites dogs!</h2>
-          <Button onClick={handleOpen}>OPEN</Button>
+          <button className="btn__modal_Create" onClick={handleOpen}>
+            New Dog
+          </button>
         </div>
         <div>
           <table>
@@ -165,6 +206,7 @@ function Crud() {
                 <th>Breed</th>
                 <th>Sub-Breeds</th>
                 <th>Images</th>
+                <th>Custom</th>
               </tr>
             </thead>
             <tbody>
@@ -172,18 +214,28 @@ function Crud() {
                 <tr key={elem.id}>
                   <td>{elem.name}</td>
                   <td>{elem.breed}</td>
-                  <td>{elem.subBreed}</td>
-                  <td>
+                  <td>{elem.subBreed.join(", ")}</td>
+                  <td className="img__table_wrapper">
                     {elem.imageList.map((src) => (
                       <img key={src.id} src={src} className="img__formList" />
                     ))}
                   </td>
                   <td>
-                    <button onClick={() => handleEditForm(elem)}>Edit</button>
+                    <div className="tableBtnWrapper">
+                      <button
+                        className="table_Btn"
+                        onClick={() => handleEditForm(elem)}
+                      >
+                        Edit
+                      </button>
 
-                    <button onClick={() => handleDeleteForm(elem.id)}>
-                      Remove
-                    </button>
+                      <button
+                        className="table_Btn"
+                        onClick={() => handleDeleteForm(elem.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -191,6 +243,7 @@ function Crud() {
           </table>
         </div>
       </section>
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -213,9 +266,10 @@ function Crud() {
                 type="text"
                 placeholder="whats your thought?"
                 value={formData.name || name}
-                onChange={(ev) =>
+                onChange={(ev) => (
+                  setName(ev.target.value),
                   setFormData({ ...formData, name: ev.target.value })
-                }
+                )}
                 required
               />
               <label className="dogForm__label">Name of the dog</label>
@@ -224,8 +278,19 @@ function Crud() {
                 type="text"
                 list="dogs"
                 placeholder="Select a Doggy"
-                value={formData.breed || breed}
-                onChange={handleInputChange}
+                value={isEditing ? formData.breed : breed}
+                onChange={(ev) => {
+                  const selectedValue = ev.target.value;
+                  if (isEditing) {
+                    setFormData({ ...formData, breed: selectedValue });
+                  } else {
+                    setBreed(selectedValue);
+                    // Luego, puedes realizar tu solicitud Axios aquí según el valor de selectedValue
+                    if (selectedValue) {
+                      getSubBreed(selectedValue);
+                    }
+                  }
+                }}
                 required
               />
               <datalist id="dogs" className="dogForm__datalist">
@@ -234,18 +299,24 @@ function Crud() {
                 })}
               </datalist>
               <label className="dogForm__label">Sub-Breed</label>
-              <input
-                type="text"
-                list="subBreeds"
-                placeholder="Select Sub Breed"
-                value={formData.subBreed || selSubBreed}
-                onChange={(ev) => handleSubBreedChange(ev)}
+              <select
+                placeholder="check their Sub Breed"
+                value={formData.subBreed}
+                onChange={handleSubBreedChange}
                 className="dogsForm__input"
-              />
-              <datalist id="subBreeds" className="dogForm__datalist">
+              >
+                {subBreed >= 0 && (
+                  <option value="" disabled>
+                    Does not have breeds
+                  </option>
+                )}
                 {subBreed.length > 0 &&
-                  subBreed?.map((el) => <option key={el}>{el}</option>)}
-              </datalist>
+                  subBreed.map((el) => (
+                    <option key={el} value={el}>
+                      {el}
+                    </option>
+                  ))}
+              </select>
               <label className="dogForm__label">Images</label>
               <div className="dogForm__PictureWrapper">
                 {isEditing
@@ -268,7 +339,7 @@ function Crud() {
                         />
                       </picture>
                     ))
-                  : images?.map((el, index) => (
+                  : formData.imageList?.map((el, index) => (
                       <picture key={index} className="dogForm__Picture">
                         <img
                           src={el}
@@ -282,10 +353,30 @@ function Crud() {
                           className="dogForm_checkbox"
                           type="checkbox"
                           value={el}
-                          onChange={handleImageList}
+                          onChange={handleImageNew}
                         />
                       </picture>
                     ))}
+                {formData.breed &&
+                  images?.map((el, index) => (
+                    <picture key={index} className="dogForm__Picture">
+                      <img
+                        src={el}
+                        className={`dogForm__ImgSRC ${
+                          imageList.includes(el)
+                            ? "checkActive"
+                            : "checkUnactive"
+                        }`}
+                      />
+                      <input
+                        className="dogForm_checkbox"
+                        type="checkbox"
+                        value={el}
+                        checked={formData.checkedImages.includes(el)}
+                        onChange={handleImageList}
+                      />
+                    </picture>
+                  ))}
               </div>
 
               <button type="submit" className="btn__form">

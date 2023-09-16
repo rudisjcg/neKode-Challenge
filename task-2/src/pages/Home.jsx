@@ -4,6 +4,7 @@ import DogCard from "../components/DogCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getInitialDogData } from "../redux/reducers/getDogdata";
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 function Home() {
   const [dogListData, setDogListData] = useState([]);
@@ -31,17 +32,7 @@ function Home() {
 
   return (
     <>
-      <section className="headerSection">
-        <picture className="pictureHomeContainer">
-          <button className="btnPictureHome">
-            <Link className="link" to={"/explore"}>
-              Explore more!
-            </Link>
-          </button>
-          <img src={headerDocPicture} className="imgSource" />
-        </picture>
-      </section>
-
+      <Header />
       <section className="dogsSection">
         <h1 className="dogsTitle">Checkout these dogs!</h1>
 
