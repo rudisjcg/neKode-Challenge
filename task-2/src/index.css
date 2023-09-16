@@ -36,6 +36,7 @@ li {
   justify-content: space-around;
   align-items: center;
   width: 100%;
+  margin-top: 20px;
 }
 
 .navLogo {
@@ -73,6 +74,13 @@ li {
   transform: scale(1.1);
 }
 
+.modal_links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0;
+}
+
 @media screen and (min-width: 768px) {
   .nav_list_links {
     display: flex;
@@ -89,6 +97,8 @@ li {
   display: flex;
   width: 100%;
   height: 400px;
+  padding: 0px;
+  position: relative;
 }
 
 .link {
@@ -106,8 +116,8 @@ li {
 
 .btnPictureHome {
   position: absolute;
-  top: 40%;
-  left: 40%;
+  top: 30%;
+  left: 25%;
   -ms-transform: translate(-50%, -50%);
   background-color: white;
   color: black;
@@ -127,11 +137,69 @@ li {
 
 @media screen and (min-width: 768px) {
   .btnPictureHome {
+    left: 40%;
+  }
+}
+
+@media screen and (min-width: 1068px) {
+  .btnPictureHome {
     left: 45%;
   }
 }
 
 /* Dog Card Component and Section */
+
+.headerSection {
+  margin-top: 40px;
+}
+
+.text-Header {
+  position: absolute;
+  display: block;
+  z-index: 2;
+  top: 25%;
+  left: 25%;
+  text-align: center;
+  color: white;
+}
+
+.header_Title .header_subTitle {
+  text-shadow: 1px 0px 0px black, /* Right shadow */ -1px 0px 0px black,
+    /* Left shadow */ 0px 1px 0px black, /* Bottom shadow */ 0px -1px 0px black; /* Top shadow */
+  color: white;
+}
+
+.header_Title {
+  text-align: center;
+  color: white;
+  font-size: 32px;
+  position: absolute;
+  width: 200px;
+  top: 50%;
+  left: 40%;
+  z-index: 9999;
+}
+
+@media screen and (min-width: 768px) {
+  .text-Header {
+    left: 40%;
+  }
+
+  .header_Title {
+    font-size: 52px;
+    width: 400px;
+  }
+  .header_subTitle {
+    font-size: 42px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .text-Header {
+    top: 20%;
+    left: 31%;
+  }
+}
 
 .dogsSection {
   padding-bottom: 20px;
@@ -286,29 +354,11 @@ li {
 }
 
 .tableRow {
-  padding: 20px;
+  margin-bottom: 20px;
 }
 
-table#customTable {
-  width: 100%;
-  background-color: #ffffff;
-  border-collapse: collapse;
-  border-width: 3px;
-  border-color: #f89b20;
-  border-style: solid;
-  color: #000000;
-}
-
-table#customTable td,
-table#customTable th {
-  border-width: 3px;
-  border-color: #f89b20;
-  border-style: solid;
-  padding: 9px;
-}
-
-table#customTable thead {
-  background-color: #f89b20;
+.tableRow h1 {
+  text-align: center;
 }
 
 /* Footer */
@@ -372,6 +422,47 @@ footer {
 
 /* Modal Form CSS */
 
+.btn__modal_Create {
+  padding: 1em 2em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #2c9caf;
+  transition: all 1000ms;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  outline: 2px solid #2c9caf;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.btn__modal_Create:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #70bdca;
+  box-shadow: 4px 5px 17px -4px #268391;
+}
+
+.btn__modal_Create::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #2c9caf;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+}
+
+.btn__modal_Create:hover::before {
+  width: 250%;
+}
+
 .dogsForm {
   display: flex;
   flex-direction: column;
@@ -380,14 +471,14 @@ footer {
 
 .dogForm__label {
   font-weight: 700;
-  font-size: 24px;
+  font-size: 16px;
   text-transform: uppercase;
   text-align: left;
 }
 
 .dogsForm__input {
-  padding: 10px;
-  font-size: 20px;
+  padding: 5px;
+  font-size: 12px;
   border-radius: 1px;
   border: none;
   border-bottom: 1px solid black;
@@ -396,7 +487,7 @@ footer {
 .dogForm__PictureWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 5px;
 }
 
 .dogForm__Picture {
@@ -405,9 +496,73 @@ footer {
 }
 
 .dogForm__ImgSRC {
-  width: 120px;
-  height: 120px;
+  width: 30px;
+  height: 30px;
   transition: all 300ms ease;
+}
+
+.table_Btn {
+  width: fit-content;
+  min-width: 70px;
+  height: 45px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2.5px solid #e0e1e4;
+  box-shadow: 0px 0px 20px -20px;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.2s ease-in-out 0ms;
+  user-select: none;
+  font-family: "Poppins", sans-serif;
+  margin-right: 5px;
+}
+
+.tableBtnWrapper {
+  display: wrap;
+}
+
+.table_Btn:hover {
+  background-color: #f2f2f2;
+  box-shadow: 0px 0px 20px -18px;
+}
+
+.table_Btn:active {
+  transform: scale(0.95);
+}
+
+@media screen and (min-width: 768px) {
+  .dogsForm__input {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 1px;
+    border: none;
+    border-bottom: 1px solid black;
+  }
+  .dogForm__label {
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .dogForm__PictureWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dogForm__ImgSRC {
+    width: 80px;
+    height: 80px;
+    transition: all 300ms ease;
+  }
+
+  .dogsForm__input {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 1px;
+    border: none;
+    border-bottom: 1px solid black;
+  }
 }
 
 .dogForm_checkbox {
@@ -492,6 +647,89 @@ footer {
 /* Table Dogs */
 
 .img__formList {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
+  margin: 1px;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+  margin-bottom: 30px;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 0.35em;
+}
+
+table th,
+table td {
+  padding: 0.625em;
+  text-align: center;
+}
+
+table th {
+  font-size: 0.85em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
 }

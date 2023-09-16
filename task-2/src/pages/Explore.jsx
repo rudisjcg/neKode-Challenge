@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getInitialDogData } from "../redux/reducers/getDogdata";
 import axios from "axios";
-import { dogUrl } from "../constants";
+import { dogUrl, exploreDogs } from "../constants";
 import DogTd from "../components/DogTd";
+import Header from "../components/Header";
 
 function Explore() {
   const [dogListData, setDogListData] = useState([]);
@@ -14,6 +15,8 @@ function Explore() {
   const [dogSearch, setDogSearch] = useState("");
   const [dogBreedsData, setDogBreedsData] = useState(false);
   const [dogName, setDogName] = useState(...(dogSearch || ""));
+  const btn = true;
+  const [dogNoBreeds, setDogNobreed] = useState(false);
 
   async function getList() {
     const breedNames = Object.keys(data?.dogData?.message);
@@ -42,7 +45,13 @@ function Explore() {
   }, [data]);
 
   async function dogBreeds() {
-    const { data } = await axios.get(dogUrl + `${dogSearch}/list`);
+    const { data } = await axios
+      .get(dogUrl + `${dogSearch}/list`)
+      .catch(function (err) {
+        if (err) {
+          setDogNobreed(true);
+        }
+      });
     setDogBreedsData(true);
     setDogListData(data?.message);
   }
@@ -85,9 +94,8 @@ function Explore() {
 
       // Borra todas las filas de la tabla
       rowsToRemove.forEach((row) => table.removeChild(row));
-      console.log(rowsToRemove);
 
-      // Agrega primero las filas #noBreeds y luego las filas #withBreeds
+      //Asi se organizaran las rows primero con breeds luego sin breeds
       withBreedsRows.forEach((row) => table.appendChild(row));
       noBreedsRows.forEach((row) => table.appendChild(row));
     } else if (filter === "withoutSubBreeds") {
@@ -113,6 +121,7 @@ function Explore() {
 
   return (
     <>
+      <Header text={exploreDogs} btn={btn} />
       <section className="explorePage">
         <div className="row">
           <div className="searchWrapper">
@@ -153,6 +162,12 @@ function Explore() {
               </tr>
             </thead>
             <tbody>
+              {dogListData.length === 0 && (
+                <tr>
+                  <td>{dogSearch}</td>
+                  <td>Does not have Breeds</td>
+                </tr>
+              )}
               {dogListData?.map((dog) => (
                 <DogTd
                   key={dog.id}
